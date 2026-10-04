@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#183b35" />
+    <title>Link Desk</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #1d2926;
+        --muted: #64716d;
+        --paper: #f4f4ef;
+        --surface: #fff;
+        --line: #dfe4de;
+        --green: #245c50;
+        --green-dark: #183b35;
+        --coral: #c9533e;
+        --soft-green: #e7f0eb;
+        --soft-red: #faeae6;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        font-size: 15px;
+        line-height: 1.5;
+      }
+
+      button, input { font: inherit; }
+      button, a { -webkit-tap-highlight-color: transparent; }
+
+      .masthead {
+        background: var(--green-dark);
+        color: #f7f6ef;
+        border-bottom: 4px solid var(--coral);
+      }
+
+      .masthead-inner, main {
+        width: min(1080px, calc(100% - 40px));
+        margin: 0 auto;
+      }
+
+      .masthead-inner {
+        min-height: 132px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .eyebrow {
+        margin: 0 0 5px;
+        color: #b6d2c5;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 34px;
+        font-weight: 400;
+        line-height: 1.15;
+      }
+
+      .server-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        color: #d1e0d8;
+        font-size: 13px;
+        white-space: nowrap;
+      }
+
+      .server-label::before {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #89d2a2;
+        content: "";
+      }
+
+      main { padding: 34px 0 56px; }
+
+      .section-heading {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 16px;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 650;
+      }
+
+      .section-note, .summary {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .create-section { padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+
+      form {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 10px;
+      }
+
+      input {
+        min-width: 0;
+        height: 48px;
+        padding: 0 14px;
+        border: 1px solid #cbd4cd;
+        border-radius: 4px;
+        background: var(--surface);
+        color: var(--ink);
+        outline: none;
+      }
+
+      input::placeholder { color: #89938e; }
+      input:focus { border-color: var(--green); box-shadow: 0 0 0 3px #245c501c; }
+
+      button {
+        min-height: 44px;
+        padding: 0 17px;
+        border: 0;
+        border-radius: 4px;
+        background: var(--green);
+        color: white;
+        cursor: pointer;
+        font-weight: 650;
+      }
+
+      button:hover { background: #19483e; }
+      button:disabled { cursor: wait; opacity: 0.65; }
+
+      .notice {
+        min-height: 0;
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .notice:not(:empty) { margin-top: 12px; }
+      .notice.error { color: #a63827; }
+      .notice.success { color: var(--green); }
+      .notice a { margin-left: 7px; color: inherit; font-weight: 700; }
+
+      .records-section { padding-top: 27px; }
+      .section-heading.records-heading { align-items: center; }
+      .records-heading > div { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+      .refresh-button {
+        min-height: 36px;
+        padding: 0 12px;
+        border: 1px solid #cbd4cd;
+        background: transparent;
+        color: var(--ink);
+        font-size: 13px;
+      }
+      .refresh-button:hover { background: #e8ebe5; }
+
+      .table-wrap {
+        overflow-x: auto;
+        border-top: 1px solid #cbd4cd;
+        border-bottom: 1px solid #cbd4cd;
+      }
+
+      table { width: 100%; border-collapse: collapse; text-align: left; }
+      th {
+        padding: 11px 14px;
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+      }
+      td { padding: 14px; border-top: 1px solid var(--line); vertical-align: middle; }
+      th:first-child, td:first-child { padding-left: 2px; }
+      th:last-child, td:last-child { padding-right: 2px; }
+      tbody tr { background: transparent; }
+      tbody tr:hover { background: #eeefe9; }
+      .original-link {
+        display: block;
+        max-width: 510px;
+        overflow: hidden;
+        color: var(--ink);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .short-link {
+        display: inline-block;
+        padding: 3px 7px;
+        border-radius: 3px;
+        background: var(--soft-green);
+        color: var(--green-dark);
+        font-family: Consolas, monospace;
+        font-size: 13px;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+      .short-link:hover { text-decoration: underline; }
+      .click-count { font-variant-numeric: tabular-nums; }
+      .date-cell { color: var(--muted); font-size: 13px; white-space: nowrap; }
+      .empty-state { padding: 34px 14px; color: var(--muted); text-align: center; }
+
+      @media (max-width: 640px) {
+        .masthead-inner, main { width: min(100% - 28px, 1080px); }
+        .masthead-inner { min-height: 112px; }
+        h1 { font-size: 29px; }
+        main { padding-top: 25px; }
+        .server-label { font-size: 12px; }
+        .section-heading { align-items: flex-start; flex-direction: column; gap: 4px; }
+        form { grid-template-columns: 1fr; }
+        form button { width: 100%; }
+        .section-heading.records-heading { align-items: flex-start; flex-direction: row; }
+        .date-column, .date-cell { display: none; }
+        th, td { padding-right: 9px; padding-left: 9px; }
+        .original-link { max-width: 42vw; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="masthead">
+      <div class="masthead-inner">
+        <div>
+          <p class="eyebrow">URL Shortener · API Console</p>
+          <h1>Link Desk</h1>
+        </div>
+        <span class="server-label">Connected to this server</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="create-section" aria-labelledby="create-title">
+        <div class="section-heading">
+          <h2 id="create-title">Shorten a URL</h2>
+          <p class="section-note">Submit a URL to create a redirect link.</p>
+        </div>
+        <form id="create-form">
+          <input id="url-input" name="url" type="text" placeholder="https://example.com/article" autocomplete="url" aria-label="URL to shorten" />
+          <button id="submit-button" type="submit">Create short link</button>
+        </form>
+        <p id="notice" class="notice" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="records-section" aria-labelledby="records-title">
+        <div class="section-heading records-heading">
+          <div>
+            <h2 id="records-title">Saved links</h2>
+            <p id="summary" class="summary">Loading links…</p>
+          </div>
+          <button id="refresh-button" class="refresh-button" type="button">Refresh</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Original URL</th>
+                <th scope="col">Short link</th>
+                <th scope="col">Clicks</th>
+                <th scope="col" class="date-column">Created</th>
+              </tr>
+            </thead>
+            <tbody id="url-list">
+              <tr><td class="empty-state" colspan="4">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const form = document.querySelector("#create-form");
+      const input = document.querySelector("#url-input");
+      const submitButton = document.querySelector("#submit-button");
+      const refreshButton = document.querySelector("#refresh-button");
+      const notice = document.querySelector("#notice");
+      const summary = document.querySelector("#summary");
+      const urlList = document.querySelector("#url-list");
+
+      async function readResponse(response) {
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(payload.error || `Request failed (${response.status})`);
+        }
+        return payload;
+      }
+
+      function setNotice(message, kind = "") {
+        notice.className = `notice ${kind}`;
+        notice.replaceChildren(document.createTextNode(message));
+      }
+
+      function renderUrls(urls) {
+        urlList.replaceChildren();
+
+        if (urls.length === 0) {
+          const row = document.createElement("tr");
+          const cell = document.createElement("td");
+          cell.className = "empty-state";
+          cell.colSpan = 4;
+          cell.textContent = "No URLs yet. Create one above to get started.";
+          row.append(cell);
+          urlList.append(row);
+          summary.textContent = "0 links · 0 clicks";
+          return;
+        }
+
+        let totalClicks = 0;
+        for (const item of urls) {
+          totalClicks += Number(item.clicks) || 0;
+          const row = document.createElement("tr");
+          const originalCell = document.createElement("td");
+          const originalLink = document.createElement("a");
+          originalLink.className = "original-link";
+          originalLink.href = item.originalUrl;
+          originalLink.target = "_blank";
+          originalLink.rel = "noopener noreferrer";
+          originalLink.textContent = item.originalUrl;
+          originalLink.title = item.originalUrl;
+          originalCell.append(originalLink);
+
+          const shortCell = document.createElement("td");
+          const shortLink = document.createElement("a");
+          shortLink.className = "short-link";
+          shortLink.href = `/${encodeURIComponent(item.shortCode)}`;
+          shortLink.target = "_blank";
+          shortLink.rel = "noopener noreferrer";
+          shortLink.textContent = `/${item.shortCode}`;
+          shortLink.title = "Open the short link and test its redirect";
+          shortCell.append(shortLink);
+
+          const clicksCell = document.createElement("td");
+          clicksCell.className = "click-count";
+          clicksCell.textContent = String(item.clicks ?? 0);
+
+          const dateCell = document.createElement("td");
+          dateCell.className = "date-cell";
+          dateCell.textContent = item.createdAt
+            ? new Date(item.createdAt).toLocaleDateString()
+            : "—";
+
+          row.append(originalCell, shortCell, clicksCell, dateCell);
+          urlList.append(row);
+        }
+
+        summary.textContent = `${urls.length} ${urls.length === 1 ? "link" : "links"} · ${totalClicks} ${totalClicks === 1 ? "click" : "clicks"}`;
+      }
+
+      async function loadUrls() {
+        refreshButton.disabled = true;
+        try {
+          const payload = await readResponse(await fetch("/api/url"));
+          renderUrls(payload.data?.urls ?? []);
+        } catch (error) {
+          summary.textContent = "Could not load links";
+          urlList.replaceChildren();
+          const row = document.createElement("tr");
+          const cell = document.createElement("td");
+          cell.className = "empty-state";
+          cell.colSpan = 4;
+          cell.textContent = error.message;
+          row.append(cell);
+          urlList.append(row);
+        } finally {
+          refreshButton.disabled = false;
+        }
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        setNotice("");
+        submitButton.disabled = true;
+        submitButton.textContent = "Creating…";
+
+        try {
+          const payload = await readResponse(await fetch("/api/url", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ url: input.value })
+          }));
+          const { shortCode, originalUrl } = payload.data;
+          setNotice(`Created a short link for ${originalUrl}`, "success");
+          const link = document.createElement("a");
+          link.href = `/${encodeURIComponent(shortCode)}`;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.textContent = `/${shortCode}`;
+          link.title = "Open the short link and test its redirect";
+          notice.append(link);
+          input.value = "";
+          await loadUrls();
+        } catch (error) {
+          setNotice(error.message, "error");
+        } finally {
+          submitButton.disabled = false;
+          submitButton.textContent = "Create short link";
+        }
+      });
+
+      refreshButton.addEventListener("click", loadUrls);
+      window.addEventListener("focus", loadUrls);
+      loadUrls();
+    </script>
+  </body>
+</html>
